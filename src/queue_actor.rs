@@ -37,3 +37,13 @@ pub trait QueueHandler: 'static {
     incoming: Self::Incoming,
   ) -> Result<Option<Self::Outgoing>, Error>;
 }
+
+/*
+  [STRUCT] QueueActor
+  * the connection to RabbitMQ is build over a TcpStream
+  * handler must implement QueueHandler trait
+*/
+pub struct QueueActor<T: QueueHandler> {
+  channel: Channel<TcpStream>,
+  handler: T,
+}
