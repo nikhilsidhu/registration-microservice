@@ -47,3 +47,14 @@ pub struct QueueActor<T: QueueHandler> {
   channel: Channel<TcpStream>,
   handler: T,
 }
+
+/*
+  [TRAIT] Actor
+  * to become an actor we must implement the actix::Actor trait
+  * started() -> for creating the queues
+*/
+impl<T: QueueHandler> Actor for QueueActor<T> {
+  type Context = Context<Self>;
+
+  fn started(&mut self, _: &mut Self::Context) {}
+}
