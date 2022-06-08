@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>QR Parser</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css"
+    />
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"
+    ></script>
+    <script>
+      // setTimeout(function() { location.reload(); }, 5000);
+    </script>
+  </head>
+  <body>
+    <section class="section">
+      <h1 class="title">Camping Registration</h1>
+      <div class="container is-fullwidth">
+        <form
+          class="form"
+          action="/task"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div class="field">
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                placeholder="E-mail Address"
+                required
+              />
+            </div>
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                placeholder="First Name"
+                required
+              />
+            </div>
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                placeholder="Last Name"
+                required
+              />
+            </div>
+            <div class="control">
+              <label>Date: </label>
+              <input
+                type="date"
+                id="start"
+                name="date"
+                value="2022-06-08"
+                min="2022-06-08"
+                max="2022-12-31"
+              />
+            </div>
+            <div class="control has-icons-left">
+              <label>Location: </label>
+              <div class="select">
+                <select>
+                  <option selected>Adam Lake Campground</option>
+                  <option>Asessippi Campground</option>
+                  <option>Bakers Narrows Campground</option>
+                  <option>Beresford Lake Campground</option>
+                  <option>Betula Lake Campground</option>
+                  <option>Big Whiteshell Campground</option>
+                  <option>Birch Point Campground</option>
+                  <option>Bird Lake Campground - Nopiming</option>
+                  <option>Birds Hill Campground</option>
+                  <option>Black Lake Campground</option>
+                  <option>Blue Lake Campground</option>
+                  <option>Brereton Lake Campground</option>
+                  <option>Caddy Lake Campground</option>
+                  <option>Camp Morton Campground</option>
+                  <option>Campers Cove Campground - Clearwater</option>
+                  <option>Childs Lake Campground</option>
+                  <option>Falcon Beach Campground</option>
+                  <option>Falcon Creek Campground</option>
+                  <option>Falcon Lakeshore Campground</option>
+                  <option>Grand Beach Campground</option>
+                  <option>Hecla Gull Harbour Campground</option>
+                  <option>Hnausa Beach Campground</option>
+                  <option>Kiche Manitou Campground - Spruce Woods</option>
+                  <option>Lundar Beach Campground</option>
+                  <option>Manipogo Campground</option>
+                  <option>Moose Lake Campground</option>
+                  <option>Nutimik Lake Campground</option>
+                  <option>Opapiskaw Campground</option>
+                  <option>Otter Falls Campground</option>
+                  <option>Paint Lake Campground</option>
+                  <option>Pioneer Bay Campground - Clearwater</option>
+                  <option>Rainbow Beach Campground</option>
+                  <option>Rivers Campground</option>
+                  <option>St. Malo Campground</option>
+                  <option>Stephenfield Campground</option>
+                  <option>Tulabi Falls Campground</option>
+                  <option>Watchorn Campground</option>
+                  <option>Wekusko Falls Campground</option>
+                  <option>Wellman Lake Campground</option>
+                  <option>West Hawk Lake Campground</option>
+                  <option>White Lake Campground</option>
+                  <option>William Lake Campground</option>
+                  <option>Winnipeg Beach Campground</option>
+                </select>
+              </div>
+              <div class="icon is-small is-left">
+                <i class="fas fa-globe"></i>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <button class="button is-primary">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <table class="table is-fullwidth">
+          <thead>
+            <tr>
+              <th>Task ID</th>
+              <th>Timestamp</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for task in tasks %}
+            <tr>
+              <td>{{ task.task_id }}</td>
+              <td>{{ task.timestamp }}</td>
+              <td>{{ task.status }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </body>
+</html>

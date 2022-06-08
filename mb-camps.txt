@@ -1,43 +1,43 @@
-Adam Lake Campground
-Asessippi Campground
-Bakers Narrows Campground
-Beresford Lake Campground
-Betula Lake Campground
-Big Whiteshell Campground
-Birch Point Campground
-Bird Lake Campground - Nopiming
-Birds Hill Campground
-Black Lake Campground
-Blue Lake Campground
-Brereton Lake Campground
-Caddy Lake Campground
-Camp Morton Campground
-Campers Cove Campground - Clearwater
-Childs Lake Campground
-Falcon Beach Campground
-Falcon Creek Campground
-Falcon Lakeshore Campground
-Grand Beach Campground
-Hecla Gull Harbour Campground
-Hnausa Beach Campground
-Kiche Manitou Campground - Spruce Woods
-Lundar Beach Campground
-Manipogo Campground
-Moose Lake Campground
-Nutimik Lake Campground
-Opapiskaw Campground
-Otter Falls Campground
-Paint Lake Campground
-Pioneer Bay Campground - Clearwater
-Rainbow Beach Campground
-Rivers Campground
-St. Malo Campground
-Stephenfield Campground
-Tulabi Falls Campground
-Watchorn Campground
-Wekusko Falls Campground
-Wellman Lake Campground
-West Hawk Lake Campground
-White Lake Campground
-William Lake Campground
-Winnipeg Beach Campground
+<option>Adam Lake Campground</option>
+<option>Asessippi Campground</option>
+<option>Bakers Narrows Campground</option>
+<option>Beresford Lake Campground</option>
+<option>Betula Lake Campground</option>
+<option>Big Whiteshell Campground</option>
+<option>Birch Point Campground</option>
+<option>Bird Lake Campground - Nopiming</option>
+<option>Birds Hill Campground</option>
+<option>Black Lake Campground</option>
+<option>Blue Lake Campground</option>
+<option>Brereton Lake Campground</option>
+<option>Caddy Lake Campground</option>
+<option>Camp Morton Campground</option>
+<option>Campers Cove Campground - Clearwater</option>
+<option>Childs Lake Campground</option>
+<option>Falcon Beach Campground</option>
+<option>Falcon Creek Campground</option>
+<option>Falcon Lakeshore Campground</option>
+<option>Grand Beach Campground</option>
+<option>Hecla Gull Harbour Campground</option>
+<option>Hnausa Beach Campground</option>
+<option>Kiche Manitou Campground - Spruce Woods</option>
+<option>Lundar Beach Campground</option>
+<option>Manipogo Campground</option>
+<option>Moose Lake Campground</option>
+<option>Nutimik Lake Campground</option>
+<option>Opapiskaw Campground</option>
+<option>Otter Falls Campground</option>
+<option>Paint Lake Campground</option>
+<option>Pioneer Bay Campground - Clearwater</option>
+<option>Rainbow Beach Campground</option>
+<option>Rivers Campground</option>
+<option>St. Malo Campground</option>
+<option>Stephenfield Campground</option>
+<option>Tulabi Falls Campground</option>
+<option>Watchorn Campground</option>
+<option>Wekusko Falls Campground</option>
+<option>Wellman Lake Campground</option>
+<option>West Hawk Lake Campground</option>
+<option>White Lake Campground</option>
+<option>William Lake Campground</option>
+<option>Winnipeg Beach Campground</option>
