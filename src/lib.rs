@@ -15,16 +15,16 @@ pub const REQUESTS: &str = "requests";
 pub const RESPONSES: &str = "responses";
 
 /*
-* [FUNCTION] spawn_client()
-* creates a Client and creates a Channel from it
-*   -> using a TcpStream (constant address)
-*   -> the Client is connected to RabbitMQ
-* we execute the connect future immediately using block_on()
-*   -> returns the Client and a Heartbeat instance
-*   -> the heartbeat pings RabbitMQ as part of the event loop
-*
-* [PARAM] sys (&mut SystemRunner) -> runs our systems event loop
-* [RETURN] channel -> the created Channel instance
+  * [FUNCTION] spawn_client()
+  * creates a Client and creates a Channel from it
+  *   -> using a TcpStream (constant address)
+  *   -> the Client is connected to RabbitMQ
+  * we execute the connect future immediately using block_on()
+  *   -> returns the Client and a Heartbeat instance
+  *   -> the heartbeat pings RabbitMQ as part of the event loop
+  *
+  * [PARAM] sys (&mut SystemRunner) -> runs our systems event loop
+  * [RETURN] channel -> the created Channel instance
 */
 pub fn spawn_client(sys: &mut SystemRunner) -> Result<Channel<TcpStream>, Error> {
   // TODO: make spawn_client() take an address param
@@ -39,4 +39,25 @@ pub fn spawn_client(sys: &mut SystemRunner) -> Result<Channel<TcpStream>, Error>
   actix::spawn(heartbeat.map_err(drop));
   let channel = sys.block_on(client.create_channel())?;
   Ok(channel)
+}
+
+/*
+  * [FUNCTION] ensure_queue()
+  * set QueueDeclareOptions to default
+  * auto_delete -> remove queue when application ends
+  *
+  * [PARAM] chan (&Channel<TcpStream>)
+  * [PARAM] name (&str)
+  * [RETURN] calls queue_declare()
+*/
+pub fn ensure_queue(
+  chan: &Channel<TcpStream>,
+  name: &str,
+) -> impl Future<Item = Queue, Error = LapinError> {
+  let opts = QueueDeclareOptions {
+    auto_delete: true,
+    ..Default::default()
+  };
+  let table = FieldTable::new();
+  chan.queue_declare(name, opts, table)
 }
