@@ -86,3 +86,20 @@ pub enum Response {
   Failed(String),
 }
 
+/*
+* [TRAIT] From
+* from() -> constructs value that returns the result type
+*/
+impl From<Result<String, Error>> for Response {
+  fn from(res: Result<String, Error>) -> Self {
+    match res {
+      Ok(data) => Response::Succeed(data),
+      Err(err) => Response::Failed(err.to_string()),
+    }
+  }
+}
+
+// Implement actix::Message trait for Request
+impl Message for Response {
+  type Result = ();
+}
