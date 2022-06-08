@@ -83,7 +83,7 @@ impl<T: QueueHandler> QueueActor<T> {
     sys.block_on(fut)?;
     let fut = ensure_queue(&chan, handler.incoming()).and_then(move |queue| {
       let opts = BasicConsumeOptions {
-        ..Defaul::default()
+        ..Default::default()
       };
       let table = FieldTable::new();
       let name = format!("{}-consumer", queue.name());
