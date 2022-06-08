@@ -60,6 +60,55 @@ impl fmt::Display for Status {
   }
 }
 
+/*
+* [STRUCT] State
+* the server has shared state
+* tasks -> the shared list of tasks
+* addr -> address of Actor/Handler
+*/
+#[derive(Clone)]
+struct State {
+  tasks: SharedTasks,
+  addr: Addr<QueueActor<ServerHandler>>,
+}
+
+/*
+* [STRUCT] ServerHandler
+* keeps a copy of the shared tasks
+*/
+struct ServerHandler {
+  tasks: SharedTasks,
+}
+
+/*
+* [TRAIT] QueueHandler
+* incoming() -> responses from the workers
+* outgoing() -> requests for the worker
+* handle() -> updates the status of tasks
+*/
+impl QueueHandler for ServerHandler {
+  type Incoming = Response;
+  type Outgoing = Request;
+
+  fn incoming(&self) -> &str {
+    RESPONSES
+  }
+  fn outgoing(&self) -> &str {
+    REQUESTS
+  }
+  fn handle(
+    &self,
+    id: &TaskId,
+    incoming: Self::Incoming,
+  ) -> Result<Option<Self::Outgoing>, Error> {
+    debug!("Result returned: {:?}", incoming);
+    self.tasks.lock().unwrap().get_mut(id).map(move |rec| {
+        rec.status = Status::Done(incoming);
+    });
+    Ok(None)
+  }
+}
+
 fn main() {
   
 }
