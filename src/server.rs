@@ -45,6 +45,21 @@ enum Status {
   Done(Response),
 }
 
+/*
+* We can use a display trait for status to update our HTML template
+*/
+impl fmt::Display for Status {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    match self {
+      Status::InProgress => write!(f, "in progress"),
+      Status::Done(resp) => match resp {
+        Response::Succeed(data) => write!(f, "done: {}", data),
+        Response::Failed(err) => write!(f, "failed: {}", err),
+      },
+    }
+  }
+}
+
 fn main() {
   
 }
