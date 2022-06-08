@@ -135,3 +135,99 @@ impl<T: QueueHandler> StreamHandler<Delivery, LapinError> for QueueActor<T> {
     }
   }
 }
+
+/*
+* [STRUCT] SendMessage
+* we will use an actor to send this message
+*/
+pub struct SendMessage<T>(pub T);
+
+/*
+* [TRAIT] Message
+* we set the result type to TaskId because we
+* set a new ID for each message (processed by a handler)
+*/
+impl<T> Message for SendMessage<T> {
+  type Result = TaskId;
+}
+
+/*
+* [TRAIT] Handle
+*
+* [FUNCTION] handle()
+* [RETURN] we generate a new uuid and turn it into a string
+*/
+impl<T: QueueHandler> Handler<SendMessage<T::Outgoing>> for QueueActor<T> {
+  type Result = TaskId;
+
+  fn handle(&mut self, msg: SendMessage<T::Outgoing>, ctx: &mut Self::Context) -> Self::Result {
+    let corr_id = Uuid::new_v4().to_simple().to_string();
+    self.send_message(corr_id.clone(), msg.0, ctx);
+    corr_id
+  }
+}
+
+/*
+* [FUNCTION] process_message()
+* we start by getting the id of the item
+* we parse the json data of the item
+* we then pass this off to the handler() of QueueHandler instance
+*   -> this returns a Outgoing message
+*   -> it is not yet serialized (we do this in send_message())
+*
+* [PARAM] item (Delivery)   -> message received
+* [PARAM] _ (Context<Self>) -> Context of QueueActor
+* [RETURN] the paramaters for send_message()
+*/
+impl<T: QueueHandler> QueueActor<T> {
+  fn process_message(
+    &self,
+    item: Delivery,
+    _: &mut Context<Self>,
+  ) -> Result<Option<(ShortString, T::Outgoing)>, Error> {
+    let corr_id = item
+      .properties
+      .correlation_id()
+      .to_owned()
+      .ok_or_else(|| format_err!("Message has no address for the response"))?;
+    let incoming = serde_json::from_slice(&item.data)?;
+    let outgoing = self.handler.handle(&corr_id, incoming)?;
+    if let Some(outgoing) = outgoing {
+      Ok(Some((corr_id, outgoing)))
+    } else {
+      Ok(None)
+    }
+  }
+}
+
+/*
+* [FUNCTION] send_message()
+* we serialize the data to binary
+*   -> if successfully turned into JSON we send msg to outgoing queue
+*   -> we log the error if message cannot be serialized
+*
+* [PARAM] corr_id -> unique id of incoming message
+* [PARAM] outgoing -> message
+* [PARAM] ctx -> Context of QueueActor
+*/
+impl<T: QueueHandler> QueueActor<T> {
+  fn send_message(&self, corr_id: ShortString, outgoing: T::Outgoing, ctx: &mut Context<Self>) {
+    let data = serde_json::to_vec(&outgoing);
+    match data {
+      Ok(data) => {
+        let opts = BasicPublishOptions::default();
+        let props = BasicProperties::default().with_correlation_id(corr_id);
+        debug!("Sending to: {}", self.handler.outgoing());
+        let fut = self
+          .channel
+          .basic_publish("", self.handler.outgoing(), data, opts, props)
+          .map(drop)
+          .map_err(drop);
+        ctx.spawn(wrap_future(fut));
+      }
+      Err(err) => {
+        warn!("Can't encode an outgoing message: {}", err);
+      }
+    }
+  }
+}
