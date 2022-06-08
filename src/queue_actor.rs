@@ -66,7 +66,7 @@ impl<T: QueueHandler> Actor for QueueActor<T> {
   * the basic_consume method starts listening for new messages
   *   -> returns a future that is resolved into a stream value
   * we use block_on again to execute this future, resolve it into a stream
-  *   and then attach it to the QueueActor we create
+  *   and then attach it to the QueueActor we create`
   * 
   * [PARAM] handler (QueueHandler)
   *           -> used to create the queues & used to create QueueActor
@@ -95,5 +95,43 @@ impl<T: QueueHandler> QueueActor<T> {
       Self { channel, handler }
     });
     Ok(addr)
+  }
+}
+
+/*
+  * [TRAIT] StreamHandler
+  * the basic_consume method used in QueueHandler returns Delivery
+  *   type objects from the queue (Stream)
+  * we implement this trait to attach the Stream to QueueActor
+  * 
+  * [FUNCTION] handle()
+  * RabbitMQ expects we acknowledge when we consume a delivered message
+  *   -> we use basic_ack() to accomplish this
+  *   -> if the process_message doesn't return None, we can use it as a
+  *       response message to the outgoing queue (with send_message())
+  *
+  * [PARAM] item (Delivery)
+  *           -> message recieved from the queue
+  * [PARAM] ctx (&mut Context<Self>)
+  *           -> each actor maintains its internal state through Context
+*/
+impl<T: QueueHandler> StreamHandler<Delivery, LapinError> for QueueActor<T> {
+  fn handle(&mut self, item: Delivery, ctx: &mut Context<Self>) {
+    debug!("Message received!");
+    let fut = self
+      .channel
+      .basic_ack(item.delivery_tag, false)
+      .map_err(drop);
+    ctx.spawn(wrap_future(fut));
+    match self.process_message(item, ctx) {
+      Ok(pair) => {
+        if let Some((corr_id, data)) = pair {
+          self.send_message(corr_id, data, ctx);
+        }
+      }
+      Err(err) => {
+        warn!("Message processing error: {}", err);
+      }
+    }
   }
 }
