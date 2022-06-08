@@ -11,3 +11,5 @@ use lapin::types::FieldTable;
 use serde_derive::{Deserialize, Serialize};
 use tokio::net::TcpStream;
 
+pub const REQUESTS: &str = "requests";
+pub const RESPONSES: &str = "responses";
