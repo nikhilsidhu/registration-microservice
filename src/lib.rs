@@ -61,3 +61,28 @@ pub fn ensure_queue(
   let table = FieldTable::new();
   chan.queue_declare(name, opts, table)
 }
+
+/*
+* [STRUCT] Request
+* contains the serialized data we are passing
+*/
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct Request {
+  pub data: Vec<u8>,
+}
+
+// Implement actix::Message trait for Request
+impl Message for Request {
+  type Result = ();
+}
+
+/*
+* [ENUM] Response
+* has two variants for success or errors
+*/
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub enum Response {
+  Succeed(String),
+  Failed(String),
+}
+
