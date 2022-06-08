@@ -27,6 +27,7 @@ type SharedTasks = Arc<Mutex<IndexMap<String, Record>>>;
 * timestamp -> when task was posted
 * status -> task status
 */
+#[derive(Clone)]
 struct Record {
   task_id: TaskId,
   timestamp: DateTime<Utc>,
@@ -107,6 +108,41 @@ impl QueueHandler for ServerHandler {
     });
     Ok(None)
   }
+}
+
+/*
+* [FUNCITON] index_handler()
+* returns Ok http response with name of microservice
+*/
+fn index_handler(_: &HttpRequest<State>) -> HttpResponse {
+  HttpResponse::Ok().body("Camping Registration Microservice")
+}
+
+/*
+* [FUNCTION] tasks_handler()
+* renders requests part of tasks struct
+*/
+fn tasks_handler(req: HttpRequest<State>) -> impl Future<Item = HttpResponse, Error = WebError> {
+  let tasks: Vec<_> = req
+    .state()
+    .tasks
+    .lock()
+    .unwrap()
+    .values()
+    .cloned()
+    .collect();
+  let tmpl = Tasks { tasks };
+  future::ok(HttpResponse::Ok().body(tmpl.render().unwrap()))
+}
+
+/*
+* [STRUCT] Tasks
+* struct for our requests
+*/
+#[derive(Template)]
+#[template(path = "register.html")]
+struct Tasks {
+  tasks: Vec<Record>,
 }
 
 fn main() {
