@@ -68,11 +68,7 @@ pub fn ensure_queue(
 */
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Request {
-  email: String,
-  fname: String,
-  lname: String,
-  date: String,
-  location: String,
+  pub data: Vec<u8>,
 }
 
 // Implement actix::Message trait for Request
