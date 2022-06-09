@@ -14,6 +14,7 @@ use indexmap::IndexMap;
 use log::debug;
 use registration_microservice::queue_actor::{QueueActor, QueueHandler, SendMessage, TaskId};
 use registration_microservice::{Request, Response, REQUESTS, RESPONSES};
+use serde::Deserialize;
 use std::fmt;
 use std::sync::{Arc, Mutex};
 

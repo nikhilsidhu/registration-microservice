@@ -68,7 +68,11 @@ pub fn ensure_queue(
 */
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Request {
-  pub data: Vec<u8>,
+  email: String,
+  fname: String,
+  lname: String,
+  date: String,
+  location: String,
 }
 
 // Implement actix::Message trait for Request
@@ -99,7 +103,7 @@ impl From<Result<String, Error>> for Response {
   }
 }
 
-// Implement actix::Message trait for Request
+// Implement actix::Message trait for Response
 impl Message for Response {
   type Result = ();
 }

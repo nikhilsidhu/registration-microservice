@@ -25,7 +25,7 @@
           class="form"
           action="/task"
           method="post"
-          enctype="multipart/form-data"
+          enctype="application/x-www-form-urlencoded"
         >
           <div class="field">
             <div class="control">
@@ -33,6 +33,8 @@
                 class="input"
                 type="text"
                 placeholder="E-mail Address"
+                id="email"
+                name="email"
                 required
               />
             </div>
@@ -41,6 +43,8 @@
                 class="input"
                 type="text"
                 placeholder="First Name"
+                id="fname"
+                name="fname"
                 required
               />
             </div>
@@ -49,6 +53,8 @@
                 class="input"
                 type="text"
                 placeholder="Last Name"
+                id="lname"
+                name="lname"
                 required
               />
             </div>
@@ -66,7 +72,7 @@
             <div class="control has-icons-left">
               <label>Location: </label>
               <div class="select">
-                <select>
+                <select name="location" id="location">
                   <option selected>Adam Lake Campground</option>
                   <option>Asessippi Campground</option>
                   <option>Bakers Narrows Campground</option>
